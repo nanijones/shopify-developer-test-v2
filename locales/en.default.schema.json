@@ -1645,6 +1645,9 @@
         "price": {
           "name": "Price"
         },
+        "description": {
+          "name": "Description"
+        },
         "quantity_selector": {
           "name": "Quantity selector"
         },
@@ -1673,9 +1676,6 @@
         },
         "pickup_availability": {
           "name": "Pickup availability"
-        },
-        "description": {
-          "name": "Description"
         },
         "share": {
           "name": "Share",

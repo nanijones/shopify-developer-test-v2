@@ -140,11 +140,16 @@ class QuantityInput extends HTMLElement {
   constructor() {
     super();
     this.input = this.querySelector('input');
+    this.totalPriceContainer = document.querySelector('#total-price'); 
+    this.productPrice = parseFloat(this.getAttribute('data-product-price')) / 100;
     this.changeEvent = new Event('change', { bubbles: true })
-
+  
     this.querySelectorAll('button').forEach(
       (button) => button.addEventListener('click', this.onButtonClick.bind(this))
     );
+
+    this.updateTotalPrice();
+    this.input.addEventListener('change', this.updateTotalPrice.bind(this));
   }
 
   onButtonClick(event) {
@@ -153,6 +158,12 @@ class QuantityInput extends HTMLElement {
 
     event.target.name === 'plus' ? this.input.stepUp() : this.input.stepDown();
     if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
+  }
+
+  updateTotalPrice() {
+    const quantity = parseInt(this.input.value, 10);
+    const totalPrice = this.productPrice * quantity;
+    this.totalPriceContainer.textContent = 'Your total: $' + totalPrice.toFixed(2);
   }
 }
 
@@ -771,6 +782,7 @@ class VariantSelects extends HTMLElement {
       this.updateVariantInput();
       this.renderProductInfo();
       this.updateShareUrl();
+      this.updateVariantName();
     }
   }
 
@@ -784,6 +796,11 @@ class VariantSelects extends HTMLElement {
         return this.options[index] === option;
       }).includes(false);
     });
+  }
+
+  updateVariantName(){
+    var checkedValue = document.querySelector('.product-form__input input:checked').value;
+    document.getElementById("form__variant").innerHTML = checkedValue;
   }
 
   updateMedia() {
@@ -830,6 +847,10 @@ class VariantSelects extends HTMLElement {
       pickUpAvailability.innerHTML = '';
     }
   }
+
+  updateFormLabel(){
+    const formVariant = document.getElementsByClassName("form__variant");
+  };
 
   removeErrorMessage() {
     const section = this.closest('section');

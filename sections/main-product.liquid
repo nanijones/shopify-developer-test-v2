@@ -384,7 +384,8 @@
                   {{ 'products.product.quantity.label' | t }}
                 </label>
 
-                <quantity-input class="quantity">
+                <quantity-input class="quantity" 
+                  data-product-price="{{ product.price }}">
                   <button class="quantity__button no-js-hidden" name="minus" type="button">
                     <span class="visually-hidden">
                       {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
@@ -407,6 +408,8 @@
                     {% render 'icon-plus' %}
                   </button>
                 </quantity-input>
+
+                <label><span id="total-price"></span></label>
               </div>
             {%- when 'popup' -%}
               <modal-opener
@@ -479,7 +482,7 @@
                   >
                     {%- for option in product.options_with_values -%}
                       <fieldset class="js product-form__input">
-                        <legend class="form__label">{{ option.name }}</legend>
+                        <legend class="form__label">{{ option.name }}: <span id="form__variant">{{ option.selected_value }}</span></legend>
                         {%- for value in option.values -%}
                           <input
                             type="radio"
@@ -491,11 +494,12 @@
                               checked
                             {% endif %}
                           >
+                          
                           <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
-                            {{ value }}
+                            <img src="{{ product.variants[forloop.index0].featured_image | image_url: width: 100 }}" alt="{{ value }}" >
                           </label>
                         {%- endfor -%}
-                      </fieldset>
+                      </fieldset> 
                     {%- endfor -%}
                     <script type="application/json">
                       {{ product.variants | json }}
@@ -1212,6 +1216,11 @@
       "limit": 1
     },
     {
+      "type": "description",
+      "name": "t:sections.main-product.blocks.description.name",
+      "limit": 1
+    },
+    {
       "type": "quantity_selector",
       "name": "t:sections.main-product.blocks.quantity_selector.name",
       "limit": 1
@@ -1252,11 +1261,6 @@
           "info": "t:sections.main-product.blocks.buy_buttons.settings.show_dynamic_checkout.info"
         }
       ]
-    },
-    {
-      "type": "description",
-      "name": "t:sections.main-product.blocks.description.name",
-      "limit": 1
     },
     {
       "type": "share",
